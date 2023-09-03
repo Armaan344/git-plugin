@@ -1,0 +1,46 @@
+pipeline {
+    agent any
+    environment {
+        DIRECTORY_PATH = '/your/code/directory/path'
+        TESTING_ENVIRONMENT = 'TestingEnvironment'
+        PRODUCTION_ENVIRONMENT = 'YourName' // Replace 'YourName' with your actual name
+    }
+    stages {
+        stage('Build') {
+            steps {
+                script {
+                    echo "Fetching the source code from ${env.DIRECTORY_PATH}"
+                    echo "Compiling the code and generating necessary artifacts"
+                }
+            }
+        }
+        stage('Test') {
+            steps {
+                echo "Running unit tests"
+                echo "Running integration tests"
+            }
+        }
+        stage('Code Quality Check') {
+            steps {
+                echo "Checking the quality of the code"
+            }
+        }
+        stage('Deploy') {
+            steps {
+                echo "Deploying to ${env.TESTING_ENVIRONMENT}"
+            }
+        }
+        stage('Approval') {
+            steps {
+                echo "Waiting for manual approval..."
+                input message: 'Proceed with deployment to production?', ok: 'Deploy to Production'
+            }
+        }
+        stage('Deploy to Production') {
+            steps {
+                echo "Deploying to ${env.PRODUCTION_ENVIRONMENT}"
+            }
+        }
+    }
+}
+
